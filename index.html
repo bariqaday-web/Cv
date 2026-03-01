@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EBQAD | UI/UX Futuristic Design</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --midnight: #0B1020; --cyan: #4EF3E8; --white: #E6F1FF; }
+        body { background-color: var(--midnight); color: var(--white); font-family: 'IBM Plex Sans Arabic', sans-serif; scroll-behavior: smooth; overflow-x: hidden; user-select: none; }
+        .logo-text::after { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(78, 243, 232, 0.6), transparent); animation: shineOnce 2s ease-out forwards; }
+        @keyframes shineOnce { 0% { left: -100%; } 100% { left: 100%; } }
+        .menu-toggle.active span:nth-child(1) { transform: translateY(10px) rotate(45deg); }
+        .menu-toggle.active span:nth-child(2) { opacity: 0; transform: translateX(20px); }
+        .menu-toggle.active span:nth-child(3) { transform: translateY(-10px) rotate(-45deg); }
+        #sheet-projects { display: flex; width: max-content; cursor: grab; will-change: transform; }
+        .project-card { width: 220px; height: 220px; border: 1px solid rgba(78, 243, 232, 0.1); backdrop-filter: blur(10px); transition: 0.5s; }
+        @media (min-width: 768px) { .project-card { width: 300px; height: 300px; } }
+        .project-card:hover { border-color: var(--cyan); transform: scale(1.02); }
+        .contact-icons { transition: 0.5s ease; opacity: 0; display: none; }
+        .contact-icons.show { opacity: 1; display: flex; }
+    </style>
+</head>
+<body>
+
+    <header class="fixed top-0 w-full z-[1000] py-6 md:py-8 flex justify-center bg-gradient-to-b from-[#0B1020] to-transparent">
+        <div class="logo-container cursor-pointer" onclick="window.scrollTo(0,0)">
+            <h1 class="logo-text relative text-xl md:text-2xl font-bold tracking-[8px] overflow-hidden">EBQAD</h1>
+        </div>
+    </header>
+
+    <button class="menu-toggle fixed top-6 right-6 md:top-10 md:right-10 z-[1001] flex flex-col gap-2 p-2 bg-black/20 rounded-lg" onclick="toggleMenu()">
+        <span class="w-8 h-0.5 bg-cyan-400 transition-all duration-300"></span>
+        <span class="w-5 h-0.5 bg-cyan-400 transition-all duration-300"></span>
+        <span class="w-8 h-0.5 bg-cyan-400 transition-all duration-300"></span>
+    </button>
+
+    <div id="menuOverlay" class="fixed inset-0 bg-black/95 z-[999] hidden flex-col items-center justify-center gap-10 text-2xl md:text-3xl font-light">
+        <nav class="flex flex-col items-center gap-6 md:gap-8">
+            <a href="#home" onclick="toggleMenu()" class="hover:text-cyan-400">Home</a>
+            <a href="#work" onclick="toggleMenu()" class="hover:text-cyan-400">Our Work</a>
+            <a href="#about" onclick="toggleMenu()" class="hover:text-cyan-400">About</a>
+            <button onclick="showContact()" class="text-lg md:text-xl px-10 py-2 border border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-black transition uppercase tracking-widest">Contact Us</button>
+            <div id="subContact" class="contact-icons gap-8 text-3xl mt-4">
+                <a href="#" target="_blank" class="hover:text-cyan-400"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="https://www.facebook.com/share/1FnQ746HHL/" target="_blank" class="hover:text-cyan-400"><i class="fa-brands fa-facebook"></i></a>
+                <a href="mailto:bariqaday@gmail.com" class="hover:text-cyan-400"><i class="fa-regular fa-envelope"></i></a>
+            </div>
+        </nav>
+    </div>
+
+    <section id="home" class="min-h-screen flex flex-col items-center justify-center text-center px-6 pt-20">
+        <h2 class="text-5xl sm:text-7xl md:text-9xl font-bold mb-6 tracking-tighter leading-none">DESIGNING <br class="md:hidden"> <span class="text-cyan-400">TOMORROW</span></h2>
+        <p class="text-slate-400 max-w-2xl text-sm md:text-lg mb-10 opacity-80 uppercase tracking-widest">Innovation Driven by Aquarius Intelligence</p>
+        <div class="flex flex-col sm:flex-row gap-4 sm:gap-8 w-full sm:w-auto">
+            <a href="#work" class="px-12 py-4 border border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-black transition font-semibold text-center">PROJECTS</a>
+            <a href="mailto:bariqaday@gmail.com" class="px-12 py-4 bg-white text-black font-bold text-center">HIRE ME</a>
+        </div>
+    </section>
+
+    <section id="work" class="py-16 md:py-24 bg-white/5 border-y border-white/5 cursor-grab">
+        <div class="overflow-hidden relative" id="slider-container">
+            <div id="sheet-projects"></div>
+        </div>
+    </section>
+
+    <section id="about" class="max-w-4xl mx-auto py-20 md:py-32 px-6">
+        <div class="border-b border-white/10 mb-6 pb-6">
+            <button class="w-full flex justify-between items-center text-xl md:text-3xl font-bold text-left" onclick="toggleAcc(this)">
+                <span>WHY EBQAD?</span> <i class="fa-solid fa-plus text-cyan-400 text-sm"></i>
+            </button>
+            <div class="hidden mt-6 text-slate-400 leading-relaxed text-base md:text-xl">We don't just design interfaces; we engineer digital experiences.</div>
+        </div>
+    </section>
+
+    <footer class="py-16 md:py-20 border-t border-white/5 text-center bg-black/20">
+        <div class="flex justify-center gap-8 md:gap-12 mb-10 text-3xl md:text-4xl">
+            <a href="#" target="_blank" class="hover:text-cyan-400 transition"><i class="fa-brands fa-linkedin"></i></a>
+            <a href="https://www.facebook.com/share/1FnQ746HHL/" target="_blank" class="hover:text-cyan-400 transition"><i class="fa-brands fa-facebook"></i></a>
+            <a href="mailto:bariqaday@gmail.com" class="hover:text-cyan-400 transition"><i class="fa-regular fa-envelope"></i></a>
+        </div>
+        <p class="text-slate-600 text-[10px] uppercase font-bold tracking-[4px]">EBQAD © 2026 | ALL RIGHTS RESERVED</p>
+    </footer>
+
+    <div id="projectModal" class="fixed inset-0 z-[2000] hidden items-center justify-center p-4 bg-black/90 backdrop-blur-md">
+        <div class="bg-[#161B22] border border-cyan-400/20 max-w-2xl w-full rounded-2xl overflow-hidden relative shadow-2xl">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-white/50 hover:text-cyan-400 text-2xl z-10">×</button>
+            <div id="modalContent" class="p-8 text-right"></div>
+        </div>
+    </div>
+
+    <script>
+        const container = document.getElementById('sheet-projects');
+        let isDragging = false, startX, velocity = 0, lastX = 0, animationId, autoSpeed = -1, currentTranslate = 0;
+        const API_URL = 'https://control-panel-production-6733.up.railway.app/api/projects';
+
+        async function fetchProjects() {
+            try {
+                const res = await fetch(API_URL);
+                const rows = await res.json();
+                const items = [...rows, ...rows, ...rows]; 
+                container.innerHTML = items.map(row => `
+                    <div class="project-card mx-3 md:mx-6 relative group overflow-hidden flex-shrink-0" 
+                         onclick="if(Math.abs(velocity) < 1) openModal('${row.title}', '${row.image_url}', '${row.description}')">
+                        <img src="${row.image_url || ''}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-700">
+                        <div class="absolute inset-0 flex flex-col items-center justify-center bg-black/90 opacity-0 group-hover:opacity-100 transition duration-500 p-4 text-center">
+                            <h3 class="text-sm md:text-xl font-bold mb-4 tracking-widest text-cyan-400">${row.title}</h3>
+                            <span class="px-6 py-2 border border-cyan-400 text-[10px] uppercase">عرض التفاصيل</span>
+                        </div>
+                    </div>
+                `).join('');
+                startAnimation();
+            } catch (e) { container.innerHTML = '<p class="w-full text-center py-10">جاري تحميل المشاريع...</p>'; }
+        }
+
+        function openModal(title, img, desc) {
+            const modal = document.getElementById('projectModal');
+            const content = document.getElementById('modalContent');
+            content.innerHTML = `
+                <img src="${img}" class="w-full h-48 object-cover rounded-xl mb-6 shadow-lg border border-white/5">
+                <h2 class="text-2xl font-bold text-cyan-400 mb-4">${title}</h2>
+                <p class="text-slate-300 leading-relaxed mb-6">${desc || 'لا يوجد وصف متاح حالياً.'}</p>
+                <button onclick="closeModal()" class="w-full py-3 bg-cyan-400 text-black font-bold rounded-lg hover:bg-white transition">إغلاق</button>
+            `;
+            modal.classList.replace('hidden', 'flex');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('projectModal');
+            modal.classList.replace('flex', 'hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function startAnimation() {
+            function update() {
+                if (!isDragging) { currentTranslate += velocity + autoSpeed; velocity *= 0.95; if (Math.abs(currentTranslate) >= container.scrollWidth / 2) currentTranslate = 0; }
+                container.style.transform = `translateX(${currentTranslate}px)`;
+                animationId = requestAnimationFrame(update);
+            }
+            update();
+        }
+
+        const startDrag = (e) => { isDragging = true; startX = (e.pageX || e.touches[0].pageX); lastX = startX; velocity = 0; };
+        const moveDrag = (e) => { if (!isDragging) return; const x = (e.pageX || e.touches[0].pageX); const walk = x - lastX; currentTranslate += walk; velocity = walk; lastX = x; };
+        const stopDrag = () => isDragging = false;
+
+        const sliderArea = document.getElementById('work');
+        sliderArea.addEventListener('mousedown', startDrag);
+        sliderArea.addEventListener('touchstart', startDrag);
+        window.addEventListener('mousemove', moveDrag);
+        window.addEventListener('touchmove', moveDrag);
+        window.addEventListener('mouseup', stopDrag);
+        window.addEventListener('touchend', stopDrag);
+
+        function toggleMenu() {
+            const btn = document.querySelector('.menu-toggle');
+            const overlay = document.getElementById('menuOverlay');
+            btn.classList.toggle('active');
+            overlay.classList.toggle('hidden');
+            overlay.classList.toggle('flex');
+            document.body.classList.toggle('overflow-hidden');
+        }
+
+        function showContact() { document.getElementById('subContact').classList.toggle('show'); }
+        function toggleAcc(btn) { const content = btn.nextElementSibling; content.classList.toggle('hidden'); btn.querySelector('i').classList.toggle('fa-plus'); btn.querySelector('i').classList.toggle('fa-minus'); }
+
+        fetchProjects();
+    </script>
+</body>
+</html>
