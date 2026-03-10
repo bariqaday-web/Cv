@@ -1,1 +1,225 @@
-<!DOCTYPE html> <html lang="ar" dir="rtl"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"> <title>EBQAD | Portfolio 2026</title> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/> <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script> <script src="https://cdn.tailwindcss.com"></script> <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;600;700&display=swap" rel="stylesheet"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> <style> :root{--midnight:#0B1020;--cyan:#4EF3E8;--white:#E6F1FF}body{background-color:var(--midnight);color:var(--white);font-family:'IBM Plex Sans Arabic',sans-serif;scroll-behavior:smooth;overflow-x:hidden;margin:0}.container-custom{max-width:1100px;margin:0 auto;width:92%}.logo-sparkle{position:relative;display:inline-block;color:var(--cyan);overflow:hidden;letter-spacing:6px}.logo-sparkle::after{content:"";position:absolute;top:0;left:-150%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.8),transparent);transform:skewX(-20deg);animation:wind-shine 4s infinite}@keyframes wind-shine{0%{left:-150%}20%{left:150%}100%{left:150%}}.menu-toggle span{transition:all .4s cubic-bezier(.4,0,.2,1)}.menu-toggle.active span:nth-child(1){transform:rotate(-45deg) translate(-5px,6px);background:#fff}.menu-toggle.active span:nth-child(2){opacity:0;transform:translateX(10px)}.menu-toggle.active span:nth-child(3){transform:rotate(45deg) translate(-5px,-6px);background:#fff}.project-card{width:200px;height:200px;background:#050810;border:1px solid rgba(78,243,232,.1);display:flex;flex-direction:column;cursor:pointer;transition:.3s;position:relative;overflow:hidden}.card-img-container{width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:12px}.card-img-container img,.card-img-container video{max-width:100%;max-height:100%;object-fit:contain}.project-card:hover{border-color:var(--cyan);box-shadow:0 0 20px rgba(78,243,232,.15)}.swiper-wrapper{transition-timing-function:linear!important}#aboutContent{max-height:0;overflow:hidden;transition:max-height .6s ease}#aboutContent.open{max-height:600px}.title-30{font-size:30px!important}.desc-12{font-size:12px!important} </style> </head> <body> <header class="fixed top-0 w-full z-[1000] px-6 py-5 flex justify-between items-center bg-[#0B1020]/95 border-b border-white/5"> <h1 class="text-xl font-bold cursor-pointer logo-sparkle" onclick="window.scrollTo(0,0)">EBQAD</h1> <button class="menu-toggle flex flex-col gap-1.5 p-2" onclick="toggleMenu()"> <span class="w-7 h-0.5 bg-cyan-400"></span> <span class="w-5 h-0.5 bg-cyan-400 ml-auto"></span> <span class="w-7 h-0.5 bg-cyan-400"></span> </button> </header> <div id="menuOverlay" class="fixed inset-0 bg-[#0B1020] z-[999] hidden flex-col items-center justify-center gap-10 text-xl font-light tracking-[4px]"> <a href="#home" onclick="toggleMenu()" class="hover:text-cyan-400 transition">الرئيسية</a> <a href="#work" onclick="toggleMenu()" class="hover:text-cyan-400 transition">المشاريع</a> <a href="#about" onclick="toggleMenu()" class="hover:text-cyan-400 transition">عني</a> <button onclick="openContactModal();toggleMenu()" class="px-10 py-3 border border-white hover:bg-white hover:text-black transition text-sm">تواصل معي</button> </div> <section id="home" class="min-h-screen flex flex-col items-center justify-center text-center px-6 pt-20"> <h2 class="text-6xl md:text-9xl font-bold mb-4 tracking-tighter leading-tight">هندسة <br><span class="text-cyan-400">المستقبل</span></h2> <p class="text-slate-500 max-w-2xl text-[10px] uppercase tracking-[5px] mb-8">Data Engineering & Robotics Innovation</p> <div class="flex justify-center items-center gap-4 md:gap-10 mb-12 border-y border-white/5 py-8 w-full max-w-xl"> <div class="text-center"><div class="text-2xl font-bold text-[#4EF3E8]" id="count-projects">0</div><div class="text-[8px] uppercase tracking-widest opacity-40">Projects</div></div> <div class="text-center border-x border-white/10 px-8"><div class="text-sm font-bold text-white uppercase tracking-tighter">PostgreSQL</div><div class="text-[8px] uppercase tracking-widest opacity-40">Infrastructure</div></div> <div class="text-center"><div class="text-2xl font-bold text-white">2026</div><div class="text-[8px] uppercase tracking-widest opacity-40">Edition</div></div> </div> <a href="#work" class="px-10 py-4 border border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-black transition font-bold text-xs uppercase tracking-[3px]">استعراض الأعمال</a> </section> <section id="work" class="py-20 border-t border-white/5"> <div class="container-custom mb-10 text-right"> <h3 class="text-cyan-400 text-xs font-bold uppercase tracking-[10px] border-r-2 border-cyan-400 pr-4">Selected Work</h3> </div> <div class="swiper projectSwiper"> <div class="swiper-wrapper" id="sheet-projects"></div> </div> </section> <footer id="about" class="py-20 border-t border-white/5 bg-black/20"> <div class="container-custom text-right"> <div onclick="toggleAbout()" class="flex items-center justify-between cursor-pointer border-b border-white/5 pb-4 group"> <h3 class="text-white text-xl font-bold tracking-widest">عني / BRIEFING</h3> <span id="plusIcon" class="text-cyan-400 text-2xl">+</span> </div> <div id="aboutContent" class="mt-6"> <p id="aboutText" class="text-slate-400 desc-12 leading-loose opacity-90">جاري التحميل...</p> </div> <div class="flex justify-center gap-8 mt-16 mb-8 text-2xl text-slate-500"> <a href="https://www.facebook.com/share/17L2s1mhG2/" target="_blank" class="hover:text-cyan-400 transition"><i class="fa-brands fa-facebook-f"></i></a> <a href="mailto:bariqaday@gmail.com" class="hover:text-cyan-400 transition"><i class="fa-regular fa-envelope"></i></a> </div> <p class="text-slate-700 text-[10px] tracking-[6px] uppercase font-bold text-center">EBQAD © 2026 | BUILT FOR THE FUTURE</p> </div> </footer> <div id="fullProjectView" class="fixed inset-0 z-[3000] hidden bg-[#0B1020] overflow-y-auto p-6 md:p-12 text-center"> <button onclick="closeProjectPage()" class="fixed top-8 left-8 text-slate-400 hover:text-white z-50 text-2xl"><i class="fas fa-times"></i></button> <div class="max-w-4xl mx-auto pt-10"> <div id="fullViewMedia" class="w-full mb-10 border border-white/10 bg-black"></div> <h1 id="fullViewTitle" class="title-30 font-bold text-white mb-8 tracking-widest uppercase"></h1> <p id="fullViewDesc" class="text-slate-300 leading-relaxed text-right mb-16 px-4 whitespace-pre-line"></p> <button onclick="openContactModal()" class="px-12 py-5 bg-white text-black font-bold uppercase hover:bg-cyan-400 transition">تواصل بخصوص هذا العمل</button> </div> </div> <div id="contactModal" class="fixed inset-0 z-[4000] hidden items-center justify-center p-6 bg-black/95"> <div class="bg-[#0B1020] border border-white/10 max-w-md w-full p-8 text-right"> <h2 class="text-white font-bold mb-6">إرسال رسالة</h2> <input id="msgName" type="text" placeholder="الاسم" class="w-full bg-white/5 p-4 mb-4 border border-white/10 text-white outline-none"> <textarea id="msgBody" placeholder="التفاصيل" class="w-full bg-white/5 p-4 mb-4 border border-white/10 text-white h-32 outline-none"></textarea> <button onclick="sendMessage()" class="w-full bg-cyan-400 text-black py-4 font-bold uppercase">إرسال / Send</button> <button onclick="closeContactModal()" class="w-full text-slate-500 mt-4 text-xs uppercase">إغلاق</button> </div> </div> <script> const SB_URL="https://dxcjzryotzfaqbseqtts.supabase.co",SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR4Y2p6cnlvdHpmYXFic2VxdHRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMxMDE1MzYsImV4cCI6MjA4ODY3NzUzNn0.GjDj1AarSakbXX7D00cVh_EjSPQAFgwvkD4QprNsGko",_supabase=supabase.createClient(SB_URL,SB_KEY);let mainSwiper;function toggleMenu(){const e=document.getElementById("menuOverlay"),t=document.querySelector(".menu-toggle");e.classList.toggle("hidden"),e.classList.toggle("flex"),t.classList.toggle("active")}function toggleAbout(){const e=document.getElementById("aboutContent");document.getElementById("plusIcon").innerText=e.classList.toggle("open")?"-":"+"}async function loadData(){try{let{data:e}=await _supabase.from("projects").select("*").order("created_at",{ascending:!1});if(e){document.getElementById("count-projects").innerText=e.length;document.getElementById("sheet-projects").innerHTML=e.map((e=>`<div class="swiper-slide !w-auto"> <div class="project-card" onclick='goToProjectPage(${JSON.stringify(e).replace(/'/g,"&apos;")})'> <div class="card-img-container"> ${e.image_url&&e.image_url.includes(".mp4")?`<video src="${e.image_url}" autoplay muted loop></video>`:`<img src="${e.image_url}">`} </div> <div class="absolute bottom-0 left-0 w-full p-2 bg-black/70 backdrop-blur-sm"> <h4 class="text-white text-[8px] font-bold tracking-tighter uppercase truncate">${e.title}</h4> </div> </div> </div>`)).join(""),initSwiper()}let{data:t}=await _supabase.from("about").select("content").eq("id",1).single();t&&(document.getElementById("aboutText").innerText=t.content)}catch(e){console.error(e)}}function initSwiper(){mainSwiper=new Swiper(".projectSwiper",{slidesPerView:"auto",spaceBetween:15,loop:!0,speed:7e3,autoplay:{delay:0,disableOnInteraction:!1,pauseOnMouseEnter:!0},allowTouchMove:!0,freeMode:{enabled:!0,momentum:!1}})}function goToProjectPage(e){const t=document.getElementById("fullViewMedia");t.innerHTML=e.image_url&&e.image_url.includes(".mp4")?`<video src="${e.image_url}" controls autoplay class="w-full"></video>`:`<img src="${e.image_url}" class="w-full">`,document.getElementById("fullViewTitle").innerText=e.title,document.getElementById("fullViewDesc").innerText=e.description,document.getElementById("fullProjectView").classList.remove("hidden"),document.body.style.overflow="hidden"}function closeProjectPage(){document.getElementById("fullProjectView").classList.add("hidden"),document.body.style.overflow="auto",mainSwiper&&mainSwiper.autoplay.start()}function openContactModal(){document.getElementById("contactModal").classList.remove("hidden")}function closeContactModal(){document.getElementById("contactModal").classList.add("hidden")}async function sendMessage(){const e=document.getElementById("msgName").value,t=document.getElementById("msgBody").value;if(!e||!t)return alert("يرجى إكمال البيانات");await _supabase.from("messages").insert([{name:e,message:t}]),alert("تم الإرسال بنجاح!"),closeContactModal()}window.onload=loadData; </script> </body> </html>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>EBQAD | Portfolio 2026</title>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide-extension-auto-scroll@0.5.3/dist/js/splide-extension-auto-scroll.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=IBM+Plex+Sans+Arabic:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root{--midnight:#0B1020;--cyan:#4EF3E8;--white:#E6F1FF}
+        body{background-color:var(--midnight);color:var(--white);font-family:'IBM Plex Sans Arabic',sans-serif;scroll-behavior:smooth;overflow-x:hidden;margin:0}
+        
+        /* تأثير شعار EBQAD */
+        .logo-sparkle{font-family:'Orbitron',sans-serif;position:relative;display:inline-block;color:var(--cyan);overflow:hidden;letter-spacing:4px;font-weight:900;text-transform:uppercase}
+        .logo-sparkle::after{content:"";position:absolute;top:0;left:-150%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.8),transparent);transform:skewX(-20deg);animation:wind-shine 4s infinite}
+        @keyframes wind-shine{0%{left:-150%}20%{left:150%}100%{left:150%}}
+
+        /* --- تأثير الهمبرغر (العودة) --- */
+        .menu-toggle span { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .menu-toggle.active span:nth-child(1) { transform: rotate(-45deg) translate(-5px, 6px); background: #fff; }
+        .menu-toggle.active span:nth-child(2) { opacity: 0; transform: translateX(10px); }
+        .menu-toggle.active span:nth-child(3) { transform: rotate(45deg) translate(-5px, -6px); background: #fff; }
+        /* --------------------------- */
+
+        .project-card{width:240px;height:240px;background:#050810;border:1px solid rgba(78,243,232,.1);display:flex;flex-direction:column;cursor:pointer;transition:.3s;position:relative;overflow:hidden}
+        .ui-card{width:180px!important;height:180px!important;background:#ffffff!important;border:none!important}
+        .ui-card h4{color:#000000!important;font-weight:800;font-size:8px!important}
+        .card-img-container{width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:12px}
+        .card-img-container img,.card-img-container video{max-width:100%;max-height:100%;object-fit:contain}
+        #aboutContent{max-height:0;overflow:hidden;transition:max-height .6s ease}
+        #aboutContent.open{max-height:1000px;padding:20px 0}
+        .splide__pagination,.splide__arrows{display:none!important}
+        .splide__track{direction: ltr !important;}
+    </style>
+</head>
+<body>
+
+    <header class="fixed top-0 w-full z-[1000] px-6 py-5 flex justify-between items-center bg-[#0B1020]/95 border-b border-white/5">
+        <h1 class="text-2xl font-black cursor-pointer logo-sparkle" onclick="window.scrollTo(0,0)">EBQAD</h1>
+        <button class="menu-toggle flex flex-col gap-1.5 p-2" onclick="toggleMenu()">
+            <span class="w-7 h-0.5 bg-cyan-400"></span>
+            <span class="w-5 h-0.5 bg-cyan-400 ml-auto"></span>
+            <span class="w-7 h-0.5 bg-cyan-400"></span>
+        </button>
+    </header>
+
+    <div id="menuOverlay" class="fixed inset-0 bg-[#0B1020] z-[999] hidden flex-col items-center justify-center gap-8 text-xl font-light tracking-[4px]">
+        <a href="#home" onclick="toggleMenu()" class="hover:text-cyan-400 transition">الرئيسية</a>
+        <a href="#work" onclick="toggleMenu()" class="hover:text-cyan-400 transition">المشاريع</a>
+        <a href="#about" onclick="toggleMenu()" class="hover:text-cyan-400 transition">عني</a>
+        <a href="mailto:bariqaday@gmail.com" class="mt-4 px-10 py-2 border border-white/10 text-white text-[10px] tracking-[4px] uppercase hover:bg-white hover:text-black transition">تواصل معي</a>
+    </div>
+
+    <section id="home" class="min-h-screen flex flex-col items-center justify-center text-center px-6 pt-20">
+        <h2 class="text-6xl md:text-9xl font-bold mb-4 tracking-tighter leading-tight">هندسة <br><span class="text-cyan-400">المستقبل</span></h2>
+        <p class="text-slate-500 max-w-2xl text-[10px] uppercase tracking-[5px] mb-8">Data Engineering & Robotics Innovation</p>
+        <div class="flex justify-center items-center gap-4 md:gap-10 mb-12 border-y border-white/5 py-8 w-full max-w-xl">
+            <div class="text-center"><div class="text-2xl font-bold text-[#4EF3E8]" id="count-projects">0</div><div class="text-[8px] uppercase tracking-widest opacity-40">Projects</div></div>
+            <div class="text-center border-x border-white/10 px-8"><div class="text-sm font-bold text-white uppercase tracking-tighter">PostgreSQL</div><div class="text-[8px] uppercase tracking-widest opacity-40">Infrastructure</div></div>
+            <div class="text-center"><div class="text-2xl font-bold text-white">2026</div><div class="text-[8px] uppercase tracking-widest opacity-40">Edition</div></div>
+        </div>
+        <div class="flex flex-col gap-4 w-full max-w-[280px]">
+            <a href="#work" class="flex items-center justify-center w-full h-[55px] border border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-black transition font-bold text-[10px] uppercase tracking-[3px]">استعراض الأعمال</a>
+            <button onclick="openContactModal()" class="w-full h-[55px] bg-white text-black font-bold text-[10px] uppercase tracking-[3px] hover:bg-cyan-400 transition">تواصل معي</button>
+        </div>
+    </section>
+
+    <section id="work" class="py-20 border-t border-white/5">
+        <div class="mb-10 px-6 text-right"><h3 class="text-cyan-400 text-xs font-bold uppercase tracking-[10px] border-r-2 border-cyan-400 pr-4">Selected Work</h3></div>
+        <div id="mainSplide" class="splide mb-20"><div class="splide__track"><ul class="splide__list" id="sheet-projects"></ul></div></div>
+        <div class="mb-10 px-6 text-right"><h3 class="text-white text-xs font-bold uppercase tracking-[10px] border-r-2 border-white pr-4">User Interface Designs</h3></div>
+        <div id="uiSplide" class="splide"><div class="splide__track"><ul class="splide__list" id="ui-projects"></ul></div></div>
+    </section>
+
+    <footer id="about" class="py-20 border-t border-white/5 bg-black/20">
+        <div class="max-w-md mx-auto text-center px-6">
+            <div onclick="toggleAbout()" class="flex items-center justify-between cursor-pointer border-b border-white/5 pb-4 group">
+                <h3 class="text-white text-[10px] font-bold tracking-[6px] uppercase">عني / BRIEFING</h3>
+                <span id="plusIcon" class="text-cyan-400 text-xl">+</span>
+            </div>
+            <div id="aboutContent"><p id="aboutText" class="text-[10px] text-slate-500 leading-relaxed text-center opacity-80 py-4">جاري التحميل...</p></div>
+            <div class="flex justify-center gap-8 mt-12 mb-8 text-xl text-slate-600">
+                <a href="https://www.facebook.com/share/17L2s1mhG2/" target="_blank" class="hover:text-cyan-400 transition"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="mailto:bariqaday@gmail.com" class="hover:text-cyan-400 transition"><i class="fa-regular fa-envelope"></i></a>
+            </div>
+            <p class="text-slate-800 text-[8px] tracking-[5px] uppercase font-bold">EBQAD © 2026 | BUILT FOR THE FUTURE</p>
+        </div>
+    </footer>
+
+    <div id="fullProjectView" class="fixed inset-0 z-[3000] hidden bg-[#0B1020] overflow-y-auto p-6 text-center">
+        <button onclick="closeProjectPage()" class="fixed top-8 left-8 text-slate-400 hover:text-white z-50 text-2xl"><i class="fas fa-times"></i></button>
+        <div class="max-w-4xl mx-auto pt-10">
+            <div id="fullViewMedia" class="w-full mb-10 border border-white/10 bg-black"></div>
+            <h1 id="fullViewTitle" class="text-2xl font-bold text-white mb-6 tracking-widest uppercase text-center"></h1>
+            <p id="fullViewDesc" class="text-slate-400 leading-relaxed text-center mb-16 px-4 text-xs whitespace-pre-line"></p>
+            <div id="projectButtons" class="flex flex-col md:flex-row justify-center gap-4 mt-10 pb-20"></div>
+        </div>
+    </div>
+
+    <div id="livePreviewModal" class="fixed inset-0 z-[5000] hidden bg-black">
+        <div class="flex flex-col h-full">
+            <div class="p-4 bg-[#0B1020] border-b border-white/10 flex justify-between items-center text-white">
+                <span class="text-[10px] tracking-[4px] uppercase opacity-50">Live Preview Mode</span>
+                <button onclick="closeLivePreview()" class="text-2xl px-4"><i class="fas fa-times"></i></button>
+            </div>
+            <iframe id="previewIframe" src="" class="w-full flex-1 bg-white" frameborder="0"></iframe>
+        </div>
+    </div>
+
+    <div id="contactModal" class="fixed inset-0 z-[4000] hidden items-center justify-center p-6 bg-black/95">
+        <div class="bg-[#0B1020] border border-white/10 max-w-md w-full p-8 text-right">
+            <h2 class="text-white font-bold mb-6 text-xs uppercase tracking-widest">إرسال رسالة</h2>
+            <input id="msgName" type="text" placeholder="الاسم" class="w-full bg-white/5 p-4 mb-4 border border-white/10 text-white outline-none text-[10px]">
+            <textarea id="msgBody" placeholder="التفاصيل" class="w-full bg-white/5 p-4 mb-4 border border-white/10 text-white h-32 outline-none text-[10px]"></textarea>
+            <button onclick="sendMessage()" class="w-full bg-cyan-400 text-black py-4 font-bold uppercase text-[10px] tracking-widest">إرسال / Send</button>
+            <button onclick="closeContactModal()" class="w-full text-slate-600 mt-4 text-[8px] uppercase tracking-[4px]">إغلاق</button>
+        </div>
+    </div>
+
+    <script>
+        const SB_URL="https://dxcjzryotzfaqbseqtts.supabase.co",
+              SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR4Y2p6cnlvdHpmYXFic2VxdHRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMxMDE1MzYsImV4cCI6MjA4ODY3NzUzNn0.GjDj1AarSakbXX7D00cVh_EjSPQAFgwvkD4QprNsGko",
+              _supabase=supabase.createClient(SB_URL,SB_KEY);
+
+        function toggleMenu(){
+            const e=document.getElementById("menuOverlay"), t=document.querySelector(".menu-toggle");
+            e.classList.toggle("hidden"); e.classList.toggle("flex"); t.classList.toggle("active");
+        }
+
+        function toggleAbout(){
+            const e=document.getElementById("aboutContent");
+            document.getElementById("plusIcon").innerText=e.classList.toggle("open")?"-":"+";
+        }
+
+        async function loadData(){
+            try{
+                const{data:e}=await _supabase.from("projects").select("*").order("created_at",{ascending:!1});
+                if(e){
+                    document.getElementById("count-projects").innerText=e.length;
+                    const pList=e.filter(p=>p.category!=="ui"), uList=e.filter(p=>p.category==="ui");
+                    document.getElementById("sheet-projects").innerHTML=pList.map(p=>createCard(p,"project-card")).join("");
+                    document.getElementById("ui-projects").innerHTML=uList.map(p=>createCard(p,"project-card ui-card")).join("");
+                    setTimeout(initSplide,600);
+                }
+                const{data:t}=await _supabase.from("about").select("content").eq("id",1).single();
+                if(t)document.getElementById("aboutText").innerText=t.content;
+            }catch(err){console.error(err)}
+        }
+
+        function createCard(p,cls){
+            return `<li class="splide__slide">
+                <div class="${cls}" onclick='goToProjectPage(${JSON.stringify(p).replace(/'/g,"&apos;")})'>
+                    <div class="card-img-container">
+                        ${p.image_url&&p.image_url.includes(".mp4")?`<video src="${p.image_url}" autoplay muted loop playsinline></video>`:`<img src="${p.image_url}">`}
+                    </div>
+                    <div class="absolute bottom-0 left-0 w-full p-2 bg-black/60">
+                        <h4 class="text-white text-[7px] font-bold truncate uppercase tracking-widest">${p.title}</h4>
+                    </div>
+                </div>
+            </li>`;
+        }
+
+        function initSplide(){
+            const config={type:'loop',drag:false,autoWidth:true,gap:'20px',pagination:false,arrows:false,autoScroll:{speed:1,pauseOnHover:false,pauseOnFocus:false}};
+            if(document.querySelectorAll('#sheet-projects li').length>0) new Splide('#mainSplide',config).mount(window.splide.Extensions);
+            if(document.querySelectorAll('#ui-projects li').length>0) new Splide('#uiSplide',{...config,autoScroll:{speed:0.7}}).mount(window.splide.Extensions);
+        }
+
+        function goToProjectPage(e){
+            const mediaContainer = document.getElementById("fullViewMedia");
+            mediaContainer.innerHTML = e.image_url && e.image_url.includes(".mp4") ? 
+                `<video src="${e.image_url}" controls autoplay class="w-full"></video>` : 
+                `<img src="${e.image_url}" class="w-full">`;
+            
+            document.getElementById("fullViewTitle").innerText = e.title;
+            document.getElementById("fullViewDesc").innerText = e.description;
+            
+            let buttonsHtml = '';
+            if(e.site_url && e.site_url !== "#") {
+                buttonsHtml += `<button onclick="openLivePreview('${e.site_url}')" class="px-10 py-4 border border-cyan-400 text-cyan-400 font-bold text-[10px] uppercase hover:bg-cyan-400 hover:text-black transition">زيارة الموقع (Live)</button>`;
+            }
+            buttonsHtml += `<button onclick="openContactModal()" class="px-10 py-4 bg-white text-black font-bold text-[10px] uppercase hover:bg-cyan-400 transition">تواصل بخصوص هذا العمل</button>`;
+            
+            document.getElementById("projectButtons").innerHTML = buttonsHtml;
+            document.getElementById("fullProjectView").classList.remove("hidden");
+            document.body.style.overflow="hidden";
+        }
+
+        function closeProjectPage(){
+            document.getElementById("fullProjectView").classList.add("hidden");
+            document.body.style.overflow="auto";
+        }
+
+        function openLivePreview(url) {
+            const modal = document.getElementById('livePreviewModal');
+            document.getElementById('previewIframe').src = url;
+            modal.classList.remove('hidden');
+        }
+
+        function closeLivePreview() {
+            document.getElementById('livePreviewModal').classList.add('hidden');
+            document.getElementById('previewIframe').src = "";
+        }
+
+        function openContactModal(){document.getElementById("contactModal").classList.remove("hidden")}
+        function closeContactModal(){document.getElementById("contactModal").classList.add("hidden")}
+
+        async function sendMessage(){
+            const e=document.getElementById("msgName").value, t=document.getElementById("msgBody").value;
+            if(!e||!t)return alert("يرجى إكمال البيانات");
+            await _supabase.from("messages").insert([{name:e,message:t}]);
+            alert("تم الإرسال بنجاح!");
+            closeContactModal();
+        }
+
+        window.onload=loadData;
+    </script>
+</body>
+</html>
+
