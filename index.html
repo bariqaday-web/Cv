@@ -16,24 +16,45 @@
         .container-custom{max-width:1100px;margin:0 auto;width:92%}
         .reveal{opacity:0;transform:translateY(20px);transition:all .8s ease-out}
         .reveal.active{opacity:1;transform:translateY(0)}
-        #aboutContent{max-height:0;overflow:hidden;transition:max-height .6s cubic-bezier(.4,0,.2,1)}
-        #aboutContent.open{max-height:1000px}
-        .arrow-icon{transition:transform .4s ease}
-        .arrow-icon.rotate{transform:rotate(180deg)}
+        
+        /* تحسين حركة النبذة عني */
+        #aboutContent {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #aboutContent.open {
+            max-height: 1200px; /* القيمة التي تسمح بظهور النص كاملاً */
+        }
+        .arrow-icon { transition: transform 0.4s ease; }
+        .arrow-icon.rotate { transform: rotate(180deg); }
+
         .project-card{background:rgba(255,255,255,.02);border:1px solid rgba(78,243,232,.1);border-radius:0;transition:.3s;height:100%;display:flex;flex-direction:column}
         .project-card:hover{border-color:var(--cyan);background:rgba(78,243,232,.02)}
         .img-container{width:100%;height:220px;background:#000;overflow:hidden;border-radius:0}
         .img-container img,.img-container video{width:100%;height:100%;object-fit:cover;filter:grayscale(20%)}
+
         .menu-toggle.active span:nth-child(1){transform:rotate(-45deg) translate(-5px,6px)}
         .menu-toggle.active span:nth-child(2){opacity:0}
         .menu-toggle.active span:nth-child(3){transform:rotate(45deg) translate(-5px,-6px)}
+
+        /* تأثير اللمعة */
+        .logo-shine { position: relative; overflow: hidden; display: inline-block; }
+        .logo-shine::after {
+            content: ''; position: absolute; top: 0; left: -150%; width: 80%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(78, 243, 232, 0.7), transparent);
+            transform: skewX(-25deg);
+        }
+        .shine-active::after { animation: shine-logic 4s ease-in-out forwards; }
+        @keyframes shine-logic { 0% { left: -150%; } 100% { left: 250%; } }
+
         button,a,input,textarea{border-radius:0!important}
         .no-italic{font-style:normal!important}
     </style>
 </head>
 <body>
     <header class="fixed top-0 w-full z-[1000] px-6 py-5 flex justify-between items-center bg-[#0B1020]/95 border-b border-white/5">
-        <h1 class="text-xl font-bold tracking-[6px] cursor-pointer" onclick="window.scrollTo(0,0)">EBQAD</h1>
+        <h1 id="mainLogo" class="text-xl font-bold tracking-[6px] cursor-pointer logo-shine" onclick="window.scrollTo(0,0)">EBQAD</h1>
         <button class="menu-toggle flex flex-col gap-1.5 p-2" onclick="toggleMenu()">
             <span class="w-7 h-0.5 bg-cyan-400 transition-all"></span>
             <span class="w-5 h-0.5 bg-cyan-400 transition-all ml-auto"></span>
@@ -82,7 +103,7 @@
 
     <section id="about" class="py-32 border-t border-white/5 bg-black/10">
         <div class="container-custom">
-            <div class="reveal max-w-4xl">
+            <div class="reveal max-w-4xl active">
                 <div onclick="toggleAbout()" class="flex items-center justify-between cursor-pointer group border-b border-white/5 pb-8">
                     <h3 class="text-cyan-400 text-xs font-bold uppercase tracking-[10px] group-hover:text-white transition">Briefing / عني</h3>
                     <div class="arrow-icon text-cyan-400 text-xl group-hover:scale-125 transition"><i class="fas fa-chevron-down"></i></div>
@@ -103,21 +124,6 @@
         <p class="text-slate-700 text-[10px] tracking-[6px] uppercase font-bold">EBQAD © <span id="current-year"></span> | BUILT FOR THE FUTURE</p>
     </footer>
 
-    <div id="fullProjectView" class="fixed inset-0 z-[3000] hidden bg-[#0B1020] overflow-y-auto p-6 md:p-12 text-right">
-        <div class="container-custom pb-20">
-            <button onclick="closeProjectPage()" class="mb-12 text-slate-400 hover:text-cyan-400 flex items-center gap-4 transition text-sm font-bold uppercase tracking-[4px]"><i class="fas fa-arrow-right"></i> Back to gallery</button>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-                <div class="border border-white/10 p-1 bg-black"><div id="fullViewMedia" class="w-full"></div></div>
-                <div>
-                    <h1 id="fullViewTitle" class="text-5xl md:text-7xl font-bold text-white mb-8"></h1>
-                    <span id="fullViewTech" class="inline-block mb-10 text-cyan-400 text-[10px] font-bold tracking-[4px] border border-cyan-400/30 px-4 py-2 uppercase"></span>
-                    <p id="fullViewDesc" class="text-slate-300 leading-relaxed text-xl mb-12 no-italic"></p>
-                    <button onclick="openContactModal()" class="px-12 py-5 bg-white text-black font-bold text-[11px] uppercase tracking-widest hover:bg-cyan-400 transition">Request System Build</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div id="contactModal" class="fixed inset-0 z-[2000] hidden items-center justify-center p-6 bg-black/98 backdrop-blur-xl">
         <div class="bg-[#0B1020] border border-white/10 max-w-md w-full p-10 text-right">
             <h2 class="text-xl font-bold text-white mb-8 uppercase tracking-widest border-r-4 border-cyan-400 pr-4">Contact</h2>
@@ -131,56 +137,46 @@
     </div>
 
     <script>
-    // بيانات الربط الجديدة لمشروعك
-const SB_URL = "https://dxcjzryotzfaqbseqtts.supabase.co";
-const SB_KEY = "EyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR4Y2p6cnlvdHpmYXFic2VxdHRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMxMDE1MzYsImV4cCI6MjA4ODY3NzUzNn0.GjDj1AarSakbXX7D00cVh_EjSPQAFgwvkD4QprNsGko";
+        const SB_URL = "https://dxcjzryotzfaqbseqtts.supabase.co";
+        const SB_KEY = "EyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR4Y2p6cnlvdHpmYXFic2VxdHRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMxMDE1MzYsImV4cCI6MjA4ODY3NzUzNn0.GjDj1AarSakbXX7D00cVh_EjSPQAFgwvkD4QprNsGko";
+        const _supabase = supabase.createClient(SB_URL, SB_KEY);
 
-const _supabase = supabase.createClient(SB_URL, SB_KEY);
+        const logo = document.getElementById('mainLogo');
 
+        // اللمعة
+        function triggerShine() {
+            logo.classList.add('shine-active');
+            setTimeout(() => { logo.classList.remove('shine-active'); }, 4000);
+        }
 
+        // 1. تفعيل اللمعة فور الدخول
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(triggerShine, 600);
+        });
+
+        // 2. تفعيل اللمعة عند اللمس
+        logo.addEventListener('mouseenter', triggerShine);
+
+        // الهمبرغر
         function toggleMenu(){
             const e=document.getElementById("menuOverlay");
-            document.querySelector(".menu-toggle").classList.toggle("active"),
-            e.classList.toggle("hidden"),
-            e.classList.toggle("flex")
+            document.querySelector(".menu-toggle").classList.toggle("active");
+            e.classList.toggle("hidden"); e.classList.toggle("flex");
         }
 
+        // النبذة (تم إصلاحها هنا)
         function toggleAbout(){
-            document.getElementById("aboutContent").classList.toggle("open"),
-            document.querySelector(".arrow-icon").classList.toggle("rotate")
+            const content = document.getElementById("aboutContent");
+            const icon = document.querySelector(".arrow-icon");
+            content.classList.toggle("open");
+            icon.classList.toggle("rotate");
         }
 
-        async function loadData(){
-            try{
-                let{data:e}=await _supabase.from("projects").select("*");
-                if(e){
-                    document.getElementById("count-projects").innerText=e.length;
-                    document.getElementById("sheet-projects").innerHTML=e.map((e=>`
-                        <div class="swiper-slide project-card group cursor-pointer" onclick='goToProjectPage(${JSON.stringify(e).replace(/'/g,"&apos;")})'>
-                            <div class="img-container">
-                                ${e.image_url&&e.image_url.includes("mp4")?`<video src="${e.image_url}" autoplay muted loop></video>`:`<img src="${e.image_url}" alt="${e.title}">`}
-                            </div>
-                            <div class="p-8 text-right flex flex-col flex-1">
-                                <h4 class="text-white text-2xl font-bold mb-4 group-hover:text-cyan-400 transition tracking-tight">${e.title}</h4>
-                                <p class="text-slate-500 text-xs mb-8 line-clamp-2 leading-relaxed uppercase tracking-wider">${e.description}</p>
-                                <div class="mt-auto text-[10px] text-cyan-400 font-bold uppercase tracking-[3px] flex items-center gap-4">
-                                    <span>Exploration</span> 
-                                    <div class="h-px bg-cyan-400/30 flex-1"></div>
-                                </div>
-                            </div>
-                        </div>`)).join("");
-                    initSwiper();
-                }
-                let{data:t}=await _supabase.from("profile").select("content").single();
-                if(t) document.getElementById("aboutText").innerText=t.content;
-                document.getElementById("current-year").innerText=(new Date).getFullYear();
-            }catch(e){console.error(e)}
-        }
+        function openContactModal(){document.getElementById("contactModal").classList.replace("hidden","flex")}
+        function closeContactModal(){document.getElementById("contactModal").classList.replace("flex","hidden")}
 
         async function sendMessage(){
-            const e=document.getElementById("sendBtn"),
-                  t=document.getElementById("msgName").value,
-                  n=document.getElementById("msgBody").value;
+            const e=document.getElementById("sendBtn"), t=document.getElementById("msgName").value, n=document.getElementById("msgBody").value;
             if(!t||!n) return alert("FIELDS REQUIRED");
             e.innerText="SENDING...";
             const{error:a}=await _supabase.from("messages").insert([{name:t,message:n}]);
@@ -188,33 +184,44 @@ const _supabase = supabase.createClient(SB_URL, SB_KEY);
             e.innerText="SUBMIT INQUIRY"
         }
 
+        async function loadData(){
+            try{
+                // السطر المختصر الذي طلبته
+                let { data, error } = await _supabase.from("projects").select("*");
+                if(data){
+                    document.getElementById("count-projects").innerText=data.length;
+                    document.getElementById("sheet-projects").innerHTML=data.map((e=>`
+                        <div class="swiper-slide project-card group cursor-pointer">
+                            <div class="img-container">
+                                ${e.image_url&&e.image_url.includes("mp4")?`<video src="${e.image_url}" autoplay muted loop></video>`:`<img src="${e.image_url}" alt="${e.title}">`}
+                            </div>
+                            <div class="p-8 text-right flex flex-col flex-1">
+                                <h4 class="text-white text-2xl font-bold mb-4 group-hover:text-cyan-400 transition tracking-tight">${e.title}</h4>
+                                <p class="text-slate-500 text-xs mb-8 line-clamp-2 leading-relaxed uppercase tracking-wider">${e.description}</p>
+                            </div>
+                        </div>`)).join("");
+                    initSwiper();
+                }
+                
+                // جلب بيانات النبذة
+                let { data: profileData } = await _supabase.from("profile").select("content").single();
+                if(profileData) document.getElementById("aboutText").innerText = profileData.content;
+
+                document.getElementById("current-year").innerText=(new Date).getFullYear();
+            }catch(e){console.error(e)}
+        }
+
         function initSwiper(){
-            new Swiper(".projectSwiper",{slidesPerView:1,spaceBetween:30,loop:!0,speed:1200,autoplay:{delay:3e3},breakpoints:{768:{slidesPerView:2},1024:{slidesPerView:3}}})
+            new Swiper(".projectSwiper",{slidesPerView:1,spaceBetween:30,loop:!0,speed:1200,autoplay:{delay:3e3},breakpoints:{768:{slidesPerView:2},1024:{slidesPerView:3}}});
         }
-
-        function goToProjectPage(e){
-            const t=document.getElementById("fullViewMedia");
-            t.innerHTML=e.image_url.includes("mp4")?`<video src="${e.image_url}" controls autoplay class="w-full"></video>`:`<img src="${e.image_url}" class="w-full">`;
-            document.getElementById("fullViewTitle").innerText=e.title;
-            document.getElementById("fullViewDesc").innerText=e.description;
-            document.getElementById("fullViewTech").innerText=e.tech_stack||"DATA ENGINE / SQL";
-            document.getElementById("fullProjectView").classList.remove("hidden");
-            document.body.style.overflow="hidden"
-        }
-
-        function closeProjectPage(){
-            document.getElementById("fullProjectView").classList.add("hidden"),
-            document.body.style.overflow="auto"
-        }
-
-        function openContactModal(){document.getElementById("contactModal").classList.replace("hidden","flex")}
-        function closeContactModal(){document.getElementById("contactModal").classList.replace("flex","hidden")}
 
         window.onload=loadData;
+
+        // تأثير الظهور التدريجي عند السكرول
         window.onscroll=function(){
             document.querySelectorAll(".reveal").forEach((e=>{
-                e.getBoundingClientRect().top<window.innerHeight-100&&e.classList.add("active")
-            }))
+                if(e.getBoundingClientRect().top < window.innerHeight - 50) e.classList.add("active");
+            }));
         };
     </script>
 </body>
